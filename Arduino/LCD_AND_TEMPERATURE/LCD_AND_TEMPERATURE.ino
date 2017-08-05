@@ -7,13 +7,16 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2);
 //how many clients should be able to telnet to this ESP8266
 #define MAX_SRV_CLIENTS 3
 #define DHTTYPE DHT11   // DHT 11
-const char* ssid     = "FRITZ!Box Fon WLAN 7360"; // SSID des vorhandenen WLANs
-const char* password = "05240292237856873681"; // Passwort für das vorhandene WLAN
-const int DHTPin = 16; //PIN D0 for DHT11 Input DATA
 
-IPAddress gateway(192,168,178,1); // IP-Adresse des WLAN-Gateways
-IPAddress subnet(255,255,255,0);  // Subnetzmaske
-IPAddress ip(192,168,178,50); // feste IP-Adresse für den WeMos
+// TO BE CHANGED
+const char* ssid     = "*****************"; // SSID from your WIFI
+const char* password = "*****************"; // Password from your WIFI
+const int DHTPin = 16; //PIN D0 for DHT11 Input DATA
+// *************************************************
+
+IPAddress gateway(192,168,178,1); // IP-Adress Wifi-Gateway
+IPAddress subnet(255,255,255,0);  // Subnet
+IPAddress ip(192,168,178,50); // Static IP Adress for WeMos
 
 WiFiServer server(23); // --> default port for communication usign TELNET protocol | Server Instance
 WiFiClient serverClients[MAX_SRV_CLIENTS]; // --> Client Instanse
@@ -33,12 +36,11 @@ void setup() {
   // Turn on the backlight.
   lcd.backlight();
 
-  WiFi.config(ip, gateway, subnet); // auskommentieren, falls eine dynamische IP bezogen werden soll
+  WiFi.config(ip, gateway, subnet);
   Serial.begin(115200);
   WiFi.begin(ssid, password);
 
   dht.begin();
-
   // -->Try to connect to particular host for 20 times, If still not connected then automatically resets.
   Serial.print("\nConnecting to "); Serial.println(ssid);
   uint8_t i = 0;
@@ -60,6 +62,7 @@ void setup() {
 void loop() {
      lcd.print(getString());
 }
+
 char* getString()
 {
   uint8_t i;
@@ -106,7 +109,6 @@ char* getString()
             if (isnan(h) || isnan(t)) 
                lcd.print("Failed to read from DHT sensor!");
             else
-               
                lcd.print("Temperature:");
                lcd.print(t);
                lcd.setCursor(0,1);
@@ -130,7 +132,6 @@ char* getString()
   }
  }
 }
-
 
 
 
